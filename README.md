@@ -74,7 +74,7 @@ web3 = Web3::Eth::Rpc.new host: 'ropsten.infura.io',
                           connect_options: {
                             open_timeout: 20,
                             read_timeout: 140,
-                            use_ssl: true
+                            use_ssl: true,
                             rpc_path: '/<YOUR INFURA PERSONAL KEY>'
                           }
 ```
