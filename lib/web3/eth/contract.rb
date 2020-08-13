@@ -29,12 +29,15 @@ module Web3
         include Abi::Utils
         include Utility
 
-        attr_reader :abi, :signature, :name, :signature_hash, :input_types, :output_types, :constant
+        attr_reader :abi, :signature, :name, :signature_hash, :input_types, :output_types, :constant, :view, :pure
 
         def initialize abi
           @abi = abi
           @name = abi['name']
           @constant = !!abi['constant']
+          @stateMutability = abi['stateMutability'] 
+          @view = @stateMutability == 'view'
+          @pure = @stateMutability == 'pure'
           @input_types = abi['inputs'] ? abi['inputs'].map{|a| parse_component_type a } : []
           @output_types = abi['outputs'].map{|a| parse_component_type a } if abi['outputs']
           @signature = Abi::Utils.function_signature @name, @input_types
@@ -164,7 +167,7 @@ module Web3
       def call_contract contract_address, method_name, args
         function = functions[method_name]
         raise "No method found in ABI: #{method_name}" unless function
-        raise "Function #{method_name} is not constant: #{method_name}, requires to sign transaction" unless function.constant
+        raise "Function #{method_name} is not constant or view or pure: #{method_name}, requires to sign transaction" unless (function.constant || function.view || function.pure)
         function.do_call web3_rpc, contract_address, args
       end
 
