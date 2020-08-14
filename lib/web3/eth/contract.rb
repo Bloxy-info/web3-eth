@@ -78,7 +78,7 @@ module Web3
           elsif !indexed_args.empty? || !log_data.empty?
             all_types = abi['inputs'].collect{|a| parse_component_type a }
             [all_types[0...indexed_args.size], indexed_args].transpose.collect{|arg|
-              decode_typed_data( arg[0], [arg.[1]].pack('H*') )
+              decode_typed_data( arg[0], [arg[1]].pack('H*') )
             } + decode_abi(all_types[indexed_args.size..-1], [log_data].pack('H*') )
           else
             []
