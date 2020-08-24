@@ -46,10 +46,9 @@ module Web3
             module: api_module,
             action: action,
             apikey: api_key
-                                        }.merge(args))
+            }.merge(args))
 
-        Net::HTTP.start(uri.host, uri.port,
-                        connect_options.merge(use_ssl: uri.scheme=='https' )) do |http|
+        Net::HTTP.start(uri.host, uri.port, connect_options.merge(use_ssl: uri.scheme =='https' )) do |http|
 
           request = Net::HTTP::Get.new uri
           response = http.request request

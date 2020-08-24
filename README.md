@@ -74,7 +74,8 @@ web3 = Web3::Eth::Rpc.new host: 'ropsten.infura.io',
                           connect_options: {
                             open_timeout: 20,
                             read_timeout: 140,
-                            use_ssl: true
+                            use_ssl: true,
+                            rpc_path: '/<YOUR INFURA PERSONAL KEY>'
                           }
 ```
 
@@ -106,9 +107,14 @@ web3 = Web3::Eth::Rpc.new host: 'ropsten.infura.io',
 
 
 ### Calling Etherscan API:
-
+Mainnet:
 ```
 api = Web3::Eth::Etherscan.new 'Your API Key'
+abi = api.contract_getabi address: '0xe3fedaecd47aa8eab6b23227b0ee56f092c967a9'
+```
+Ropsten testnet:
+```
+api = Web3::Eth::RopstenEtherscan.new 'Your API Key'
 abi = api.contract_getabi address: '0xe3fedaecd47aa8eab6b23227b0ee56f092c967a9'
 ```
 
@@ -187,6 +193,18 @@ abi = api.contract_getabi address: '0x2ad180cbaffbc97237f572148fc1b283b68d8861'
 myContract = web3.eth.contract(abi);
 tx_receipt = web3.eth.getTransactionReceipt '0x83da408b05061a2512fe1abf065b37a6aad9ae96d604b288a3da34bf9f1af9e6'
 myContract.parse_log_args tx_receipt.logs.first
+```
+
+If some events are not in your ABI file, you can filter them out
+```
+myContract = web3.eth.contract(abi);
+my_contract_address = '0x2ad180cbaffbc97237f572148fc1b283b68d8861'
+tx_receipt = web3.eth.getTransactionReceipt '0x83da408b05061a2512fe1abf065b37a6aad9ae96d604b288a3da34bf9f1af9e6'
+tx_receipt.logs.map do |input|
+  if input.address == my_contract_address
+    my_events = myContract.parse_log_args input
+  end
+end
 ```
 
 ### Listing internal transactions
