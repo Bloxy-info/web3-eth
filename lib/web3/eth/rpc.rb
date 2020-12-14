@@ -16,10 +16,12 @@ module Web3
 
       DEFAULT_HOST = 'localhost'
       DEFAULT_PORT = 8545
+      DEFAULT_BLOCK = 'latest'
 
       attr_reader :eth, :connect_options
+      attr_accessor :block
 
-      def initialize host: DEFAULT_HOST, port: DEFAULT_PORT, connect_options: DEFAULT_CONNECT_OPTIONS
+      def initialize host: DEFAULT_HOST, port: DEFAULT_PORT, connect_options: DEFAULT_CONNECT_OPTIONS, block: DEFAULT_BLOCK
 
         @client_id = Random.rand 10000000
 
@@ -27,7 +29,7 @@ module Web3
         @connect_options = connect_options
 
         @eth = EthModule.new self
-
+        @block = block
       end
 
       def trace
