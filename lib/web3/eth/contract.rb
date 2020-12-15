@@ -38,7 +38,7 @@ module Web3
           @input_types = abi['inputs'] ? abi['inputs'].map{|a| parse_component_type a } : []
           @output_types = abi['outputs'].map{|a| parse_component_type a } if abi['outputs']
           @signature = Abi::Utils.function_signature @name, @input_types
-          @signature_hash = Abi::Utils.signature_hash @signature, (abi['type'].try(:downcase)=='event' ? 64 : 8)
+          @signature_hash = Abi::Utils.signature_hash @signature, (abi['type']&.downcase=='event' ? 64 : 8)
         end
 
         def parse_component_type argument
@@ -208,7 +208,7 @@ module Web3
 
         abi.each{|a|
 
-          case a['type'].try(:downcase)
+          case a['type']&.downcase
             when 'function'
               method = ContractMethod.new(a)
               @functions[method.name] = method
